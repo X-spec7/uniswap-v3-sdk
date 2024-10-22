@@ -44,8 +44,6 @@ function App() {
   const [tokenOutBalance, setTokenOutBalance] = useState<string>()
   const [blockNumber, setBlockNumber] = useState<number>(0)
 
-  const [isSendingTx, setIsSendingTx ] = useState<boolean>(false);
-
   // Listen for new blocks and update the wallet
   useOnBlockUpdated(async (blockNumber: number) => {
     refreshBalances()
@@ -75,24 +73,20 @@ function App() {
 
   const onTrade = useCallback(async (trade: TokenTrade | undefined) => {
     if (trade) {
-      setIsSendingTx(true)
-      console.log('on trade')
+      setTxState(TransactionState.Sending)
       setTxState(await executeTrade(trade))
-      setIsSendingTx(false)
     }
   }, [])
 
   const onWrapEth = useCallback(async () => {
-    setIsSendingTx(true)
+    // setTxState(TransactionState.Sending)
     await wrapETH(10)
-    setIsSendingTx(false)
   }, [])
 
   const onBundleTrade = useCallback(async (trade: TokenTrade | undefined) => {
     if (trade) {
-      setIsSendingTx(true)
-      await setTxState(await executeBundleTrade(trade))
-      setIsSendingTx(false)
+      setTxState(TransactionState.Sending)
+      setTxState(await executeBundleTrade(trade))
     }
   }, [])
 
@@ -133,7 +127,7 @@ function App() {
         <button
           className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => onWrapEth()}
-          disabled={getProvider() === null || isSendingTx}
+          disabled={getProvider() === null}
         >
           <p>Wrap ETH</p>
         </button>
@@ -144,8 +138,7 @@ function App() {
           disabled={
             trade === undefined ||
             txState === TransactionState.Sending ||
-            getProvider() === null ||
-            isSendingTx
+            getProvider() === null
           }
         >
           <p>Trade</p>
@@ -156,8 +149,7 @@ function App() {
           disabled={
             trade === undefined ||
             txState === TransactionState.Sending ||
-            getProvider() === null ||
-            isSendingTx
+            getProvider() === null
           }
         >
           <p>Bunlded Trade</p>
