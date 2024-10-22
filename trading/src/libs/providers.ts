@@ -37,15 +37,11 @@ export async function sendTransaction(
   transaction: ethers.TransactionRequest
 ): Promise<TransactionState> {
 
-  console.log('sending transaction started')
   if (transaction.value) {
     transaction.value = BigInt(transaction.value)
   }
 
   const txRes = await wallet.sendTransaction(transaction)
-
-  console.log('transaction response: ', txRes)
-  console.log('transaction response hash? ', txRes.hash)
 
   let receipt = null
 
@@ -66,8 +62,6 @@ export async function sendTransaction(
     }
   }
 
-  console.log('what the hell is this receipt: ', receipt)
-
   // Transaction was successful if status === 1
   if (receipt) {
     return TransactionState.Sent
@@ -82,8 +76,6 @@ export async function sendBundleTx(
   const blockNumber = await provider.getBlockNumber()
 
   const block = await provider.getBlock(blockNumber)
-
-  console.log('flashbots created: ', flashbotsProvider)
 
   if (!block || !block.baseFeePerGas) {
     console.log('cannot get block and base fee per gas')

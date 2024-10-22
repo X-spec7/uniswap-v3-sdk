@@ -35,7 +35,6 @@ export async function getCurrencyBalance(
 }
 
 export async function wrapETH(eth: number) {
-  console.log('started wrapping eth')
   const provider = getProvider()
 
   const address = getWalletAddress()
@@ -58,8 +57,6 @@ export async function wrapETH(eth: number) {
     maxFeePerGas: MAX_FEE_PER_GAS,
     maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
   }
-
-  console.log('wrapping eth transaction created', transaction)
 
   await sendTransaction(transaction)
 }

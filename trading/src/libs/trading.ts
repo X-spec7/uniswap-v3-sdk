@@ -98,8 +98,7 @@ export async function executeTrade(
   if (!walletAddress || !provider) {
     throw new Error('Cannot execute a trade without a connected wallet')
   }
-
-  console.log('trying to approve token')
+  
   // Give approval to the router to spend the token
   const tokenApproval = await getTokenTransferApproval(CurrentConfig.tokens.in)
 
@@ -114,8 +113,6 @@ export async function executeTrade(
     recipient: walletAddress,
   }
 
-  console.log('swap options created: ', options)
-
   const methodParameters = SwapRouter.swapCallParameters([trade], options)
 
   const tx = {
@@ -126,8 +123,6 @@ export async function executeTrade(
     maxFeePerGas: MAX_FEE_PER_GAS,
     maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
   }
-
-  console.log('transaction created: ', tx)
 
   const res = await sendTransaction(tx)
 
@@ -144,7 +139,6 @@ export async function executeBundleTrade(
     throw new Error('Cannot execute a trade without a connected wallet')
   }
 
-  console.log('trying to approve token')
   // Give approval to the router to spend the token
   const tokenApproval = await getTokenTransferApproval(CurrentConfig.tokens.in)
 
@@ -159,8 +153,6 @@ export async function executeBundleTrade(
     recipient: walletAddress,
   }
 
-  console.log('swap options created: ', options)
-
   const methodParameters = SwapRouter.swapCallParameters([trade], options)
 
   const nonce = await provider.getTransactionCount(walletAddress)
@@ -173,8 +165,6 @@ export async function executeBundleTrade(
     maxFeePerGas: MAX_FEE_PER_GAS,
     maxPriorityFeePerGas: MAX_PRIORITY_FEE_PER_GAS,
   }
-
-  console.log('transaction created: ', tx)
 
   const res = await sendBundleTx(tx)
 
@@ -229,13 +219,10 @@ export async function getTokenTransferApproval(
       wallet
     )
 
-    console.log('token contract created: ', tokenContract)
-
     const transaction = await tokenContract.approve(
       SWAP_ROUTER_ADDRESS,
       ethers.parseUnits(TOKEN_AMOUNT_TO_APPROVE_FOR_TRANSFER.toString(), "ether")
     )
-    console.log('transaction craeted: ', transaction)
 
     await transaction.wait()
 
