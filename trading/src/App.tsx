@@ -152,7 +152,7 @@ function App() {
             getProvider() === null
           }
         >
-          <p>Bunlded Trade</p>
+          <p>Bundled Trade</p>
         </button>
       </header>
     </div>

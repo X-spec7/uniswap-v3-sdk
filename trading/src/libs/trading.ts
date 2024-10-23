@@ -98,7 +98,7 @@ export async function executeTrade(
   if (!walletAddress || !provider) {
     throw new Error('Cannot execute a trade without a connected wallet')
   }
-  
+
   // Give approval to the router to spend the token
   const tokenApproval = await getTokenTransferApproval(CurrentConfig.tokens.in)
 
